@@ -16,7 +16,7 @@ var T = new Twit(config);
 const https = require('https');
 
 
-var bondPrice = 100;
+var bondPrice = 62;
 var bondMarketCap = 1000000;
 
 setInterval(function () {
@@ -45,7 +45,7 @@ setInterval(function () {
         console.log("Error: " + err.message);
     });
 
-}, 450 * 1000);
+}, 45 * 1000);
 
 let cSupply = 869164.76;
 setInterval(function () {
@@ -172,6 +172,3 @@ rule.hour = 17;
 
 // schedule
 schedule.scheduleJob(rule, tweeter);
-
-setTimeout(
-    tweeter, 60 * 1000);
