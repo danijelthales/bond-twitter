@@ -113,9 +113,9 @@ function tweeter() {
     // This is a random number bot
     var tweet = "BarnBridge Token Stats daily:\n" +
         "$BOND Price: $" + bondPrice + " \n" +
-        "Market Cap: $" + bondMarketCap.toString() + " \n" +
-        "Circulating Supply: $" + cSupply.toString() + " \n" +
-        "$BOND Staked in DAO: " + daoBond.toString();
+        "Market Cap: $" + numberWithCommas(bondMarketCap) + " \n" +
+        "Circulating Supply: $" + numberWithCommas(cSupply) + " \n" +
+        "$BOND Staked in DAO: " + numberWithCommas(daoBond);
 
     // Post that tweet!
     T.post('statuses/update', {status: tweet}, tweeted);
@@ -137,6 +137,10 @@ function delay(time) {
     return new Promise(function (resolve) {
         setTimeout(resolve, time)
     });
+}
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 function getNumberLabel(labelValue) {
