@@ -1,0 +1,58 @@
+API key
+SpcwUhGA3o11QLRUxTOUwUtK9
+
+API secret key
+IwZ63YLx6GfiDacanMxi3yQnxOJefTAQ0YQlD1g1EihkwO4nfu
+
+Bearer token
+AAAAAAAAAAAAAAAAAAAAADUSKQEAAAAAReqyy7F4T8ZGopeKIKTZHy1GSMM%3D3TFKgr8Vq3mlKzEyT7i6Q6y1wpMVFyH01eWaYa6tJIYPoxrCd6
+
+dgornjakovic87+defiusers@gmail.com
+0x461783A831E6dB52D68Ba2f3194F6fd1E0087E04
+rubyinstaller-devkit-2.4.4-2-x64.exe
+"4A6129F4E4B84AE46ED7F635628F528CF3053E04"
+
+
+twurl authorize --consumer-key SpcwUhGA3o11QLRUxTOUwUtK9 --consumer-secret IwZ63YLx6GfiDacanMxi3yQnxOJefTAQ0YQlD1g1EihkwO4nfu
+
+
+---
+profiles:
+  DeFiUsers:
+    SpcwUhGA3o11QLRUxTOUwUtK9:
+      username: DeFiUsers
+      consumer_key: SpcwUhGA3o11QLRUxTOUwUtK9
+      consumer_secret: IwZ63YLx6GfiDacanMxi3yQnxOJefTAQ0YQlD1g1EihkwO4nfu
+      token: 1333918493289361413-50owW3CX3djLpBSuLfQ1N7f6PwMups
+      secret: HZP8KT1QqrBtsfJFJSgKndimGg743DiDzeoT16gbKklwy
+configuration:
+  default_profile:
+  - DeFiUsers
+  - SpcwUhGA3o11QLRUxTOUwUtK9
+
+
+
+
+--------------------
+API key
+MLgTtsMsUQCn1LyPR2HF4vqfu
+
+API secret key
+Wfkn09fqwdTVrs6tCSJm7iin9smCPg93mr0qz3h612oG2v99dc
+
+Bearer token
+AAAAAAAAAAAAAAAAAAAAAIzcMwEAAAAATaRtjpF1Qh3J1NupQx2JoA0KWuI%3DsTkPyrmT0E9EcjLLPqNK5XNi3HGY683Ascct8V1f1XPPkBnnpL
+
+---
+profiles:
+  BarnBridgeBot:
+    MLgTtsMsUQCn1LyPR2HF4vqfu:
+      username: BarnBridgeBot
+      consumer_key: MLgTtsMsUQCn1LyPR2HF4vqfu
+      consumer_secret: Wfkn09fqwdTVrs6tCSJm7iin9smCPg93mr0qz3h612oG2v99dc
+      token: 1319404553008271360-LqFPp1zQENMOUzEC6vZzUdQMBFqgYF
+      secret: RLZS5WYlUT1m3XA25C3OtVg7yQvJN8Lm0pkJ3ufBxOINq
+configuration:
+  default_profile:
+  - BarnBridgeBot
+  - MLgTtsMsUQCn1LyPR2HF4vqfu
