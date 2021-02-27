@@ -114,7 +114,7 @@ function tweeter() {
     var tweet = "BarnBridge Token Stats daily:\n" +
         "$BOND Price: $" + bondPrice + " \n" +
         "Market Cap: $" + numberWithCommas(bondMarketCap) + " \n" +
-        "Circulating Supply: $" + numberWithCommas(cSupply) + " \n" +
+        "Circulating Supply: " + numberWithCommas(cSupply) + " \n" +
         "$BOND Staked in DAO: " + numberWithCommas(daoBond);
 
     // Post that tweet!
