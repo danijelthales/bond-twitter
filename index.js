@@ -77,35 +77,6 @@ setInterval(function () {
 }, 50 * 1000);
 
 let daoBond = 214311.49;
-setInterval(function () {
-    try {
-        https.get('https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x0391d2021f89dc339f60fff84546ea23e337750f&address=0x10e138877df69Ca44Fdc68655f86c88CDe142D7F&tag=latest', (resp) => {
-            let data = '';
-
-            // A chunk of data has been recieved.
-            resp.on('data', (chunk) => {
-                data += chunk;
-            });
-
-            // The whole response has been received. Print out the result.
-            resp.on('end', () => {
-                try {
-                    let result = JSON.parse(data).result / 1e18;
-                    if (!isNaN(result)) {
-                        daoBond = result.toFixed(2);
-                    }
-                } catch (e) {
-                    console.log(e);
-                }
-            });
-
-        }).on("error", (err) => {
-            console.log("Error: " + err.message);
-        });
-    } catch (e) {
-        console.log(e);
-    }
-}, 60 * 1000 * 5);
 
 function tweet1() {
 
@@ -225,28 +196,250 @@ function tweet2() {
 
 }
 
-// function tweet3() {
-//
-//     // This is a random number bot
-//     var tweet = "$BOND Wallet Stats:\n" +
-//         "$BOND Wallets Staking BOND" + numberWithCommas(bondWalletsStaking) + " \n" +
-//         "$BOND Wallets with BOND:" + numberWithCommas(bondHolders) + " \n" +
-//         "Treasury Amount $" + numberWithCommas(treasury);
-//
-//     // Post that tweet!
-//     T.post('statuses/update', {status: tweet}, tweeted);
-//
-//     // Callback for when the tweet is sent
-//     function tweeted(err, data, response) {
-//         if (err) {
-//             console.log(err);
-//         } else {
-//             console.log('Success: ' + data.text);
-//             //console.log(response);
-//         }
-//     };
-//
-// }
+let pool1APY = 30;
+let pool2APY = 150;
+let pool1TVL = '$342,889,913.70';
+let pool2TVL = '$38,702,681.85';
+let pool1Epoch = 21;
+let pool2Epoch = 20;
+let startcwdate = new Date('2021-03-08');
+
+const puppeteer = require('puppeteer');
+
+async function getAPY() {
+    try {
+        console.log("Fetching APY");
+        const browser = await puppeteer.launch({
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+            ],
+        });
+        const page = await browser.newPage();
+        await page.setViewport({width: 1000, height: 926});
+        await page.goto("https://www.coingecko.com/en/yield-farming", {waitUntil: 'networkidle2'});
+        await page.waitForSelector('table');
+
+        /** @type {string[]} */
+        var farm = await page.evaluate(() => {
+            var div = document.querySelectorAll('tr td:nth-child(2) a');
+
+            var farm = new Object();
+            farm.assets = [];
+            div.forEach(element => {
+                farm.assets.push(element.textContent);
+            });
+
+            div = document.querySelectorAll('tr td:nth-child(3) a');
+            farm.pools = [];
+            div.forEach(element => {
+                farm.pools.push(element.textContent);
+            });
+
+            div = document.querySelectorAll('tr td div div.mr-4');
+            farm.apys = [];
+            div.forEach(element => {
+                farm.apys.push(element.textContent);
+            });
+
+            div = document.querySelectorAll('tr td:nth-child(7)');
+            farm.tvls = [];
+            div.forEach(element => {
+                farm.tvls.push(element.textContent);
+            });
+
+            return farm
+        })
+
+        for (var i = 0; i < farm.pools.length; i++) {
+            if (farm.pools[i].includes("Barn")) {
+                pool1APY = farm.apys[i];
+                pool1APY = pool1APY.substring(0, pool1APY.indexOf("Yearly")).replace("\n", "");
+                pool1TVL = farm.tvls[i];
+                pool1TVL = pool1TVL.replace("\n", "");
+            }
+            if (farm.pools[i].includes("BOND") && farm.pools[i].includes("USDC")) {
+                pool2APY = farm.apys[i];
+                pool2APY = pool2APY.substring(0, pool2APY.indexOf("Yearly")).replace("\n", "");
+                pool2APY = pool2APY.replace("\n", "");
+            }
+        }
+
+        browser.close()
+    } catch (e) {
+        console.log("Error happened on getting data from barnbridge.");
+        console.log(e);
+    }
+}
+
+setTimeout(getAPY, 1000 * 20);
+setInterval(getAPY, 60 * 1000 * 20);
+
+function getEpoch() {
+    return function () {
+        let now = new Date();
+        var weeks = Math.round((now - startcwdate) / 604800000);
+        pool1Epoch = 21 + weeks;
+    };
+}
+
+function getEpoch2() {
+    return function () {
+        let now = new Date();
+        var weeks = Math.round((now - startcwdate) / 604800000);
+        pool2Epoch = 20 + weeks;
+    };
+}
+
+
+setInterval(getEpoch(), 60 * 1000 * 60 * 24);
+setTimeout(getEpoch(), 60 * 1000);
+
+setInterval(getEpoch2(), 60 * 1000 * 60 * 24);
+setTimeout(getEpoch2(), 60 * 1000);
+
+function tweet3() {
+    if (pool1Epoch < 26) {
+
+        // This is a random number bot
+        var tweet = "Pool 1 Stats:\n" +
+            "APY" + pool1APY + "\n" +
+            "TVL:" + pool1TVL + "\n" +
+            "Epoch" + pool1Epoch + "/25";
+
+        // Post that tweet!
+        T.post('statuses/update', {status: tweet}, tweeted);
+
+        // Callback for when the tweet is sent
+        function tweeted(err, data, response) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('Success: ' + data.text);
+                //console.log(response);
+            }
+        };
+    }
+
+}
+
+function tweet4() {
+    if (pool1Epoch < 101) {
+
+        // This is a random number bot
+        var tweet = "Pool 1 Stats:\n" +
+            "APY" + pool2APY + "\n" +
+            "TVL:" + pool2TVL + "\n" +
+            "Epoch" + pool2Epoch + "/100";
+
+        // Post that tweet!
+        T.post('statuses/update', {status: tweet}, tweeted);
+
+        // Callback for when the tweet is sent
+        function tweeted(err, data, response) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('Success: ' + data.text);
+                //console.log(response);
+            }
+        };
+    }
+
+}
+
+let daoBondAPR = 280 + "%";
+let daoBondTVL = 480000000;
+let activeProposals = 0;
+
+
+setInterval(function () {
+    try {
+        https.get('https://api.barnbridge.com/api/governance/proposals?state=active ', (resp) => {
+            let data = '';
+
+            // A chunk of data has been recieved.
+            resp.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            // The whole response has been received. Print out the result.
+            resp.on('end', () => {
+                try {
+                    let result = JSON.parse(data).meta.count;
+                    if (!isNaN(result)) {
+                        activeProposals = result;
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            });
+
+        }).on("error", (err) => {
+            console.log("Error: " + err.message);
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}, 60 * 5 * 1000);
+
+setInterval(function () {
+    try {
+        https.get('https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x0391d2021f89dc339f60fff84546ea23e337750f&address=0x10e138877df69Ca44Fdc68655f86c88CDe142D7F&tag=latest', (resp) => {
+            let data = '';
+
+            // A chunk of data has been recieved.
+            resp.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            // The whole response has been received. Print out the result.
+            resp.on('end', () => {
+                try {
+                    let result = JSON.parse(data).result / 1e18;
+                    if (!isNaN(result)) {
+                        daoBond = result.toFixed(2);
+                        daoBondAPR = 1742.86 * 365 * 100 / daoBond;
+                        daoBondAPR = daoBondAPR.toFixed(2) + "%";
+                        daoBondTVL = daoBond * bondPrice;
+                        daoBondTVL = daoBondTVL.toFixed(2);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            });
+
+        }).on("error", (err) => {
+            console.log("Error: " + err.message);
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}, 60 * 5 * 1000);
+
+
+function tweet5() {
+
+    // This is a random number bot
+    var tweet = "BarnBridge DAO Stats Last 7 Days:\n" +
+        "DAO APY: " + daoBondAPR + "\n" +
+        "TVL: $" + getNumberLabel(daoBondTVL) + "\n" +
+        "Active DAO proposals: " + activeProposals;
+
+    // Post that tweet!
+    T.post('statuses/update', {status: tweet}, tweeted);
+
+    // Callback for when the tweet is sent
+    function tweeted(err, data, response) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Success: ' + data.text);
+            //console.log(response);
+        }
+    };
+
+}
 
 
 function delay(time) {
@@ -305,41 +498,41 @@ rule2.dayOfWeek = 2;
 // schedule
 schedule.scheduleJob(rule2, tweet2);
 
-// let rule3 = new schedule.RecurrenceRule();
-//
-// // your timezone
-// rule3.tz = 'GMT';
-//
-// rule3.second = 0;
-// rule3.minute = 0;
-// rule3.hour = 17;
-// rule3.dayOfWeek = 3;
-//
-// // schedule
-// schedule.scheduleJob(rule3, tweet3);
-//
-// let rule4 = new schedule.RecurrenceRule();
-//
-// // your timezone
-// rule4.tz = 'GMT';
-//
-// rule4.second = 0;
-// rule4.minute = 0;
-// rule4.hour = 19;
-// rule4.dayOfWeek = 6;
-//
-// // schedule
-// schedule.scheduleJob(rule4, tweet4);
-//
-// let rule5 = new schedule.RecurrenceRule();
-//
-// // your timezone
-// rule5.tz = 'GMT';
-//
-// rule5.second = 0;
-// rule5.minute = 0;
-// rule5.hour = 17;
-// rule5.dayOfWeek = 1;
-//
-// // schedule
-// schedule.scheduleJob(rule4, tweet5);
+let rule3 = new schedule.RecurrenceRule();
+
+// your timezone
+rule3.tz = 'GMT';
+
+rule3.second = 0;
+rule3.minute = 0;
+rule3.hour = 17;
+rule3.dayOfWeek = 3;
+
+// schedule
+schedule.scheduleJob(rule3, tweet3);
+
+let rule4 = new schedule.RecurrenceRule();
+
+// your timezone
+rule4.tz = 'GMT';
+
+rule4.second = 0;
+rule4.minute = 0;
+rule4.hour = 19;
+rule4.dayOfWeek = 6;
+
+// schedule
+schedule.scheduleJob(rule4, tweet4);
+
+let rule5 = new schedule.RecurrenceRule();
+
+// your timezone
+rule5.tz = 'GMT';
+
+rule5.second = 0;
+rule5.minute = 0;
+rule5.hour = 17;
+rule5.dayOfWeek = 1;
+
+// schedule
+schedule.scheduleJob(rule4, tweet5);
