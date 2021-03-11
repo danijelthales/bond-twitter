@@ -177,9 +177,9 @@ function tweet2() {
 
     // This is a random number bot
     var tweet = "$BOND Wallet Stats:\n" +
-        "$BOND Wallets Staking BOND" + numberWithCommas(bondWalletsStaking) + " \n" +
-        "$BOND Wallets with BOND:" + numberWithCommas(bondHolders) + " \n" +
-        "Treasury Amount $" + numberWithCommas(treasury);
+        "$BOND Wallets Staking BOND: " + numberWithCommas(bondWalletsStaking) + " \n" +
+        "$BOND Wallets with BOND: " + numberWithCommas(bondHolders) + " \n" +
+        "Treasury Amount: $" + numberWithCommas(treasury);
 
     // Post that tweet!
     T.post('statuses/update', {status: tweet}, tweeted);
@@ -303,9 +303,9 @@ function tweet3() {
 
         // This is a random number bot
         var tweet = "Pool 1 Stats:\n" +
-            "APY" + pool1APY + "\n" +
-            "TVL:" + pool1TVL + "\n" +
-            "Epoch" + pool1Epoch + "/25";
+            "APY: " + pool1APY + "\n" +
+            "TVL: " + pool1TVL + "\n" +
+            "Epoch: " + pool1Epoch + "/25";
 
         // Post that tweet!
         T.post('statuses/update', {status: tweet}, tweeted);
@@ -328,9 +328,9 @@ function tweet4() {
 
         // This is a random number bot
         var tweet = "Pool 1 Stats:\n" +
-            "APY" + pool2APY + "\n" +
-            "TVL:" + pool2TVL + "\n" +
-            "Epoch" + pool2Epoch + "/100";
+            "APY: " + pool2APY + "\n" +
+            "TVL: " + pool2TVL + "\n" +
+            "Epoch: " + pool2Epoch + "/100";
 
         // Post that tweet!
         T.post('statuses/update', {status: tweet}, tweeted);
