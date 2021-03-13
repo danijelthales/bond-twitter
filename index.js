@@ -327,7 +327,7 @@ function tweet4() {
     if (pool1Epoch < 101) {
 
         // This is a random number bot
-        var tweet = "Pool 1 Stats:\n" +
+        var tweet = "Pool 2 Stats:\n" +
             "APY: " + pool2APY + "\n" +
             "TVL: " + pool2TVL + "\n" +
             "Epoch: " + pool2Epoch + "/100";
